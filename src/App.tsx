@@ -20,7 +20,7 @@ export default function Main() {
     }, []);
 
     const addKey = async () => {
-        if (!name || !otpSecret) return;
+        if (!name || !otpSecret || keys.find(key => key.name === name)) return;
 
         const newKeys = [...keys, { name, secret: otpSecret }];
         setKeys(newKeys);
