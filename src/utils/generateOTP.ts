@@ -10,6 +10,11 @@ function base32Decode(base32: string): Buffer {
     let bufferLength = 0;
 
     for (let i = 0; i < base32.length; i++) {
+
+        if (base32[i] === "=") { // Padding
+            break;
+        }
+
         const value = base32Chars.indexOf(base32[i]);
         if (value === -1) {
             throw new Error('Invalid base32 character');
