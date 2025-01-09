@@ -18,8 +18,6 @@ export default function Secret({ keyObj, setKeys }: SecretProps) {
 
     const updateOTP = async () => {
         const token = generateOTP(keyObj.secret);
-        setProgress(30 - Math.floor(Date.now() / 1000) % 30);
-        console.log("Generated token", token);
         setToken(token);
     };
 
@@ -28,6 +26,21 @@ export default function Secret({ keyObj, setKeys }: SecretProps) {
         const interval = setInterval(() => {
             updateOTP();
         }, 1000);
+
+        return () => clearInterval(interval);
+    }, [keyObj.secret]);
+
+    const updateProgress = () => {
+        const remaining = (30 - Math.floor(Date.now() / 1000) % 30);
+        const progress = (remaining - (Date.now() % 1000) / 1000) / 30 * 100;
+        setProgress(progress);
+    };
+
+    useEffect(() => {
+        updateProgress();
+        const interval = setInterval(() => {
+            updateProgress();
+        }, 25);
 
         return () => clearInterval(interval);
     }, [keyObj.secret]);
