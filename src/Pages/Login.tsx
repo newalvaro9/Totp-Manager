@@ -14,6 +14,7 @@ export default function Login({ setShowPassword }: Props) {
     const [password, setPassword] = useState("");
 
     const handleSubmit = async () => {
+        setPassword("");
         try {
             if (showResetPrompt) {
                 await storage.resetStorage(password);
