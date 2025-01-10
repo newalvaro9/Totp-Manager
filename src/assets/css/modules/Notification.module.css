@@ -1,0 +1,62 @@
+.notification {
+    position: fixed;
+    bottom: 1rem;
+    right: 1rem;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    max-width: 300px;
+    backdrop-filter: blur(8px);
+}
+
+.notification-error {
+    background-color: rgba(220, 38, 38, 0.95);
+    border-left: 4px solid #dc2626;
+}
+
+.notification-success {
+    background-color: rgba(22, 163, 74, 0.95);
+    border-left: 4px solid #16a34a;
+}
+
+.notification-info {
+    background-color: rgba(59, 130, 246, 0.95);
+    border-left: 4px solid #3b82f6;
+}
+
+.notification button {
+    background: transparent;
+    border: none;
+    color: currentColor;
+    opacity: 0.7;
+    cursor: pointer;
+    padding: 0;
+    margin-left: auto;
+    font-size: 1.25rem;
+    line-height: 1;
+    transition: opacity 0.2s;
+}
+
+.notification button:hover {
+    opacity: 1;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.animate-slide-in {
+    animation: slideIn 0.3s ease-out forwards;
+}

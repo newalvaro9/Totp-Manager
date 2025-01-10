@@ -1,0 +1,103 @@
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(5, 22, 26, 0.95);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.login-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.container-content {
+    gap: 1rem;
+    padding: 2rem;
+    background-color: #08272e;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+}
+
+.reset-warning {
+    color: #ff6464;
+    font-size: 20px;
+    margin-top: 8px;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.password-prompt-container {
+    background: #072E33;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    transition: all 0.3s ease;
+}
+
+
+.password-prompt-container h2 {
+    color: #4CAF50;
+    margin: 0;
+}
+
+.input-container {
+    width: 100%;
+    position: relative;
+}
+
+@keyframes glow {
+    from {
+        box-shadow: 0 0 5px #ff6464, 0 0 10px #ff6464, 0 0 15px #ff6464;
+    }
+
+    to {
+        box-shadow: 0 0 10px #ff6464, 0 0 20px #ff6464, 0 0 30px #ff6464;
+    }
+}
+
+.error {
+    border-color: #ff6464;
+    animation: glow 1.5s ease-in-out infinite alternate;
+}
+
+.error-message {
+    color: #ff6464;
+    font-size: 14px;
+    margin-top: 8px;
+    text-align: center;
+}
+
+
+.password-prompt-container input {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #0C7075;
+    border-radius: 6px;
+    background: #05161A;
+    color: white;
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+
+.password-prompt-container input:focus {
+    outline: none;
+    border-color: #4CAF50;
+    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
+}

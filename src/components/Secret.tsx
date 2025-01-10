@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { writeText } from '@tauri-apps/plugin-clipboard-manager';
 
+/* Styles */
+import styles from '../assets/css/modules/Secret.module.css';
+
 /* Utils */
 import generateOTP from '../utils/generateOTP';
 import storage from '../utils/storage';
@@ -91,15 +94,15 @@ export default function Secret({ secret, secrets, setSecrets }: SecretProps) {
                 />
             )}
             <div
-                className="secret-item"
+                className={styles["secret-item"]}
                 style={{
                     background: `linear-gradient(to left, #08272e ${progress}%, #00404b ${progress}%)`
                 }}
             >
-                <span className="secret-name">{secret.name}</span>
-                <span className="otp-code" onClick={copyKey}>{otp === "Generating..." ? otp : otp.slice(0, 3) + " " + otp.slice(3)}</span>
+                <span className={styles["secret-name"]}>{secret.name}</span>
+                <span className={styles["otp-code"]} onClick={copyKey}>{otp === "Generating..." ? otp : otp.slice(0, 3) + " " + otp.slice(3)}</span>
 
-                <button className="delete-button" onClick={() => removeKey(secret.name)}>
+                <button className={styles["delete-button"]} onClick={() => removeKey(secret.name)}>
                     Delete
                 </button>
             </div>

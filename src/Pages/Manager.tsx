@@ -3,27 +3,33 @@ import storage from './../utils/storage';
 import { save, open } from '@tauri-apps/plugin-dialog';
 import { writeTextFile, readTextFile } from '@tauri-apps/plugin-fs';
 
+/* Styles */
+import styles from '../assets/css/modules/Manager.module.css';
+
 /* Components */
 import Secret from './../components/Secret';
 import Notification from './../components/Notification';
 
 import { SecretI, NotificationState } from "./../types/types";
 
-export default function Manager() {
+interface ManagerProps {
+    setShowPassword: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+export default function Manager({ setShowPassword }: ManagerProps) {
     const [secrets, setSecrets] = useState<SecretI[]>([]);
-    const [name, setName] = useState('');
-    const [otpSecret, setOtpSecret] = useState('');
+    const [name, setName] = useState("");
+    const [otpSecret, setOtpSecret] = useState("");
     const [isInitialized, setIsInitialized] = useState(false);
     const [notification, setNotification] = useState<NotificationState | null>(null);
 
     useEffect(() => {
         (async () => {
-            storage.get().then(data => {
-                if (data) {
-                    setSecrets(JSON.parse(data));
-                    setIsInitialized(true);
-                }
-            })
+            const data = await storage.get();
+            if (data) {
+                setSecrets(data);
+                setIsInitialized(true);
+            }
         })();
     }, []);
 
@@ -151,7 +157,19 @@ export default function Manager() {
     };
 
     return (
-        <div className="container mx-auto p-4">
+        <div className={styles["container"]}>
+            <div className={styles["logout-container"]}>
+                <button
+                    onClick={() => {
+                        storage.setPassword(null);
+                        setShowPassword(true);
+                    }}
+                    className="btn btn-danger"
+                >
+                    Logout
+                </button>
+            </div>
+
             {notification && (
                 <Notification
                     message={notification.message}
@@ -159,29 +177,35 @@ export default function Manager() {
                     onClose={() => setNotification(null)}
                 />
             )}
-            <div className="menu">
+
+            <div className={styles["menu"]}>
                 <h1>TOTP Manager</h1>
+
                 <input
                     type="text"
+                    className={styles["input"]}
                     placeholder="Enter Name"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                 />
+
                 <input
                     type="text"
+                    className={styles["input"]}
                     placeholder="Enter OTP Secret"
                     value={otpSecret}
                     onChange={(e) => setOtpSecret(e.target.value)}
                 />
-                <div className="buttons">
-                    <button className="import" onClick={importFile}>Import keys</button>
-                    <button onClick={addSecret}>Add Key</button>
-                    <button className="export" onClick={exportFile}>Export keys</button>
+
+                <div className={styles["button-container"]}>
+                    <button className="btn btn-secondary" onClick={importFile}>Import keys</button>
+                    <button className="btn btn-primary" onClick={addSecret}>Add Key</button>
+                    <button className="btn btn-secondary" onClick={exportFile}>Export keys</button>
                 </div>
             </div>
 
-            <div className="container-secrets">
-                <h2 className="stored-secrets-title">Stored Secrets</h2>
+            <div className={styles["container-secrets"]}>
+                <h2 className={styles["stored-secrets-title"]}>Stored Secrets</h2>
                 {!isInitialized ? (
                     <p style={{ alignSelf: 'center' }}>Loading secrets...</p>
                 ) : secrets.length === 0 ? (

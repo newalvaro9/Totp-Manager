@@ -1,5 +1,8 @@
 import { useEffect } from 'react';
 
+/* Styles */
+import styles from "../assets/css/modules/Notification.module.css";
+
 interface NotificationProps {
     message: string;
     type: 'error' | 'success' | 'info';
@@ -16,7 +19,7 @@ export default function Notification({ message, type, onClose }: NotificationPro
     }, [onClose]);
 
     return (
-        <div className={`notification notification-${type} animate-slide-in`}>
+        <div className={`${styles["notification"]} ${styles[`notification-${type}`]}  ${styles["animate-slide-in"]}`}>
             <span>{message}</span>
             <button onClick={onClose}>×</button>
         </div>
