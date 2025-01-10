@@ -11,12 +11,11 @@
   },
   "dependencies": {
     "@tauri-apps/api": "^2",
-    "@tauri-apps/plugin-opener": "^2",
-    "@tauri-apps/plugin-store": "~2",
-    "@types/clipboard-js": "^0.3.2",
+    "@tauri-apps/plugin-clipboard-manager": "^2.2.0",
+    "@tauri-apps/plugin-dialog": "~2",
+    "@tauri-apps/plugin-fs": "~2",
     "@types/crypto-js": "^4.2.2",
     "buffer": "^6.0.3",
-    "clipboard-js": "^0.3.6",
     "crypto-js": "^4.2.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"

@@ -7,7 +7,32 @@
   ],
   "permissions": [
     "core:default",
-    "opener:default",
-    "store:default"
+    "clipboard-manager:allow-write-text",
+    "dialog:default",
+    "fs:default",
+    {
+      "identifier": "fs:allow-exists",
+      "allow": [
+        {
+          "path": "$APPDATA/*"
+        }
+      ]
+    },
+    {
+      "identifier": "fs:allow-app-write",
+      "allow": [
+        {
+          "path": "$APPDATA/*"
+        }
+      ]
+    },
+    {
+      "identifier": "fs:allow-app-read",
+      "allow": [
+        {
+          "path": "$APPDATA/*"
+        }
+      ]
+    }
   ]
 }
