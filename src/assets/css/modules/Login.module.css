@@ -23,7 +23,6 @@
 .container-content {
     gap: 1rem;
     padding: 2rem;
-    background-color: #08272e;
     border-radius: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     max-width: 400px;
@@ -47,19 +46,24 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 1.5rem;
     transition: all 0.3s ease;
 }
 
 
 .password-prompt-container h2 {
     color: #4CAF50;
-    margin: 0;
+    margin: 0 0 20px 0;
 }
 
 .input-container {
     width: 100%;
     position: relative;
+}
+
+.button-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
 }
 
 @keyframes glow {

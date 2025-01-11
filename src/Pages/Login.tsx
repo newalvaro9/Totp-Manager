@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import storage from "../utils/storage";
 
 /* Styles */
@@ -10,8 +10,17 @@ interface Props {
 
 export default function Login({ setShowPassword }: Props) {
     const [showResetPrompt, setShowResetPrompt] = useState(false);
-    const [error, setError] = useState<string | null>(null);
+    const [error, setError] = useState("");
+    const errorTimeoutRef = useRef<number>();
     const [password, setPassword] = useState("");
+
+    const setErrorWithTimeout = (message: string) => {
+        if (errorTimeoutRef.current) {
+            clearTimeout(errorTimeoutRef.current);
+        }
+        setError(message);
+        errorTimeoutRef.current = setTimeout(() => setError(""), 3000);
+    };
 
     const handleSubmit = async () => {
         setPassword("");
@@ -25,14 +34,14 @@ export default function Login({ setShowPassword }: Props) {
                     setShowPassword(false);
                     storage.setPassword(password);
                 } else {
-                    setError("Invalid password");
+                    setErrorWithTimeout("Invalid password");
                 }
             }
         } catch (err) {
             if (err instanceof Error) {
-                setError(err.message);
+                setErrorWithTimeout(err.message);
             } else {
-                setError("An unknown error occurred");
+                setErrorWithTimeout("An unknown error occurred");
             }
         }
     };
@@ -66,7 +75,7 @@ export default function Login({ setShowPassword }: Props) {
                         />
                         {error && <div className={styles["error-message"]}>{error}</div>}
                     </div>
-                    <div>
+                    <div className={styles["button-container"]}>
                         <button onClick={handleSubmit} className="btn btn-primary" style={{ marginTop: '1rem', width: '100%' }}>
                             {showResetPrompt ? "Create New Storage" : "Submit"}
                         </button>
@@ -74,11 +83,11 @@ export default function Login({ setShowPassword }: Props) {
                             <button
                                 onClick={() => {
                                     setShowResetPrompt(false);
-                                    setError(null);
+                                    setError("");
                                     setPassword("");
                                 }}
                                 className="btn btn-danger"
-                                style={{ marginTop: '0.7rem', width: '100%' }}
+                                style={{ width: '100%' }}
                             >
                                 Cancel
                             </button>
