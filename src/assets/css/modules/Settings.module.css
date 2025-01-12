@@ -7,80 +7,154 @@
 .iconButton {
     background: none;
     border: none;
-    color: #666;
+    color: #a9b1d6;
     cursor: pointer;
     padding: 0.5rem;
-    transition: color 0.2s;
+    transition: all 0.2s ease;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 16px;
-    letter-spacing: 1px;
+    border-radius: 6px;
 }
 
 .iconButton:hover {
-    color: #333;
+    color: #dae0f3;
+    background-color: #313244;
+    transform: scale(1.05);
 }
 
 .iconButton img,
 .logoutButton img {
-    width: 24px;
-    height: 24px;
+    width: 20px;
+    height: 20px;
+    filter: brightness(0) invert(1);
 }
 
 .dropdown {
     position: absolute;
     top: 100%;
     right: 0;
-    background: white;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    min-width: 250px;
+    background-color: #1a1b26;
+    border: 1px solid #313244;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    max-width: 250px;
     padding: 0;
     margin-top: 0.5rem;
     z-index: 1000;
+    overflow: hidden;
+    backdrop-filter: blur(8px);
 }
 
 .info {
-    font-size: 0.9rem;
-    color: #666;
-    padding: 0 1rem;
+    padding: 0.75rem 1.25rem;
+    background-color: #1a1b26;
 }
 
 .info p {
-    margin: 0.5rem 0;
+    margin: 0.75rem 0;
+    color: #a9b1d6;
+    font-size: 0.95rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.info p strong {
+    color: #dae0f3;
+    font-weight: 500;
+    margin-right: 1rem;
+    flex-shrink: 0;
+}
+
+.path-container {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    cursor: pointer;
+    flex: 1;
+    transition: all 0.2s ease;
+}
+
+.path-container:hover {
+    color: #dae0f3;
 }
 
 .divider {
-    border: none;
-    border-top: 1px solid #eee;
     margin: 0;
+    border: none;
+    border-top: 1px solid #313244;
 }
 
 .logoutButton {
     width: 100%;
-    padding: 0.75rem 1rem;
-    background: #f44336;
-    color: white;
+    padding: 0.875rem 1.25rem;
+    background: #1a1b26;
+    color: #f7768e;
     border: none;
-    border-bottom-left-radius: 3px;
-    border-bottom-right-radius: 3px;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-    transition: background-color 0.2s;
-    margin-top: 0.5rem;
+    transition: all 0.2s ease;
+    font-size: 0.95rem;
+    font-weight: 500;
 }
 
 .logoutButton:hover {
-    background: #d32f2f;
+    background: #2a2b36;
 }
 
 .logoutButton img {
-    width: 20px;
-    height: 20px;
-    filter: brightness(0) invert(1);
+    filter: invert(65%) sepia(85%) saturate(2728%) hue-rotate(308deg) brightness(101%) contrast(96%);
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.25rem;
+    color: #dae0f3;
+    border-bottom: 1px solid #313244;
+    font-size: 1.1rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.actions {
+    padding: 0.75rem 1.25rem;
+    display: flex;
+    gap: 0.75rem;
+    flex-direction: column;
+}
+
+.actionButton {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid #313244;
+    background: #1a1b26;
+    color: #a9b1d6;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    text-align: center;
+}
+
+.actionButton:hover {
+    background: #2a2b36;
+    color: #dae0f3;
+    border-color: #414868;
+}
+
+.actionButton img {
+    width: 16px;
+    height: 16px;
+    filter: invert(80%) sepia(14%) saturate(638%) hue-rotate(189deg) brightness(91%) contrast(90%);
+}
+
+.actionButton:hover img {
+    filter: invert(89%) sepia(11%) saturate(343%) hue-rotate(189deg) brightness(103%) contrast(93%);
 }

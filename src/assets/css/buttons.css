@@ -34,11 +34,7 @@
 }
 
 .btn-danger {
-    background-color: #f44336;
-}
-
-.btn-danger:hover {
-    background-color: #d32f2f;
+    background-color: #991b1b;
 }
 
 .btn-warning {

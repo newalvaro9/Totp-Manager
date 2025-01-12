@@ -96,7 +96,7 @@ export default function Secret({ secret, secrets, setSecrets }: SecretProps) {
             <div
                 className={styles["secret-item"]}
                 style={{
-                    background: `linear-gradient(to left, #08272e ${progress}%, #00404b ${progress}%)`
+                    background: `linear-gradient(to left, #12121c ${progress}%, #212133 ${progress}%)`
                 }}
             >
                 <span className={styles["secret-name"]}>{secret.name}</span>

@@ -1,7 +1,5 @@
 import { useState, useEffect } from 'react';
 import storage from './../utils/storage';
-import { save, open } from '@tauri-apps/plugin-dialog';
-import { writeTextFile, readTextFile } from '@tauri-apps/plugin-fs';
 
 /* Styles */
 import styles from '../assets/css/modules/Manager.module.css';
@@ -70,93 +68,6 @@ export default function Manager({ setShowPassword }: ManagerProps) {
         }
     };
 
-    const importFile = async () => {
-        try {
-            const selected = await open({
-                multiple: false,
-                filters: [{
-                    name: 'JSON',
-                    extensions: ['json']
-                }]
-            });
-
-            if (!selected) return;
-
-            const contents = await readTextFile(selected as string);
-            const importedSecrets = JSON.parse(contents);
-
-            if (!Array.isArray(importedSecrets) || !importedSecrets.every(secret =>
-                typeof secret === 'object' &&
-                typeof secret.name === 'string' &&
-                typeof secret.secret === 'string'
-            )) {
-                setNotification({
-                    message: 'Invalid file format',
-                    type: 'error'
-                });
-                return;
-            }
-
-            const newSecrets = [...secrets];
-            let duplicates = 0;
-            let added = 0;
-
-            for (const importedSecret of importedSecrets) {
-                if (!newSecrets.some(s => s.name === importedSecret.name)) {
-                    newSecrets.push(importedSecret);
-                    added++;
-                } else {
-                    duplicates++;
-                }
-            }
-
-            await storage.set(JSON.stringify(newSecrets));
-            setSecrets(newSecrets);
-
-            setNotification({
-                message: `Imported ${added} secrets${duplicates > 0 ? ` (${duplicates} duplicates skipped)` : ''}`,
-                type: 'success'
-            });
-        } catch (error) {
-            setNotification({
-                message: 'Failed to import secrets: ' + (error instanceof Error ? error.message : String(error)),
-                type: 'error'
-            });
-        }
-    };
-
-    const exportFile = async () => {
-        if (secrets.length === 0) {
-            setNotification({
-                message: 'No secrets to export',
-                type: 'error'
-            });
-            return;
-        }
-
-        try {
-            const filePath = await save({
-                filters: [{
-                    name: 'JSON',
-                    extensions: ['json']
-                }]
-            });
-
-            if (!filePath) return;
-
-            await writeTextFile(filePath, JSON.stringify(secrets, null, 2));
-            setNotification({
-                message: 'Secrets exported successfully',
-                type: 'success'
-            });
-        } catch (error) {
-            setNotification({
-                message: 'Failed to export secrets: ' + (error instanceof Error ? error.message : String(error)),
-                type: 'error'
-            });
-        }
-    };
-
     const logout = () => {
         storage.setPassword(null);
         setShowPassword(true);
@@ -165,6 +76,9 @@ export default function Manager({ setShowPassword }: ManagerProps) {
     return (
         <div className={styles.container}>
             <Settings
+                secrets={secrets}
+                setSecrets={setSecrets}
+                setNotification={setNotification}
                 onLogout={logout}
             />
 
@@ -196,9 +110,7 @@ export default function Manager({ setShowPassword }: ManagerProps) {
                 />
 
                 <div className={styles["button-container"]}>
-                    <button className="btn btn-secondary" onClick={importFile}>Import keys</button>
                     <button className="btn btn-primary" onClick={addSecret}>Add Key</button>
-                    <button className="btn btn-secondary" onClick={exportFile}>Export keys</button>
                 </div>
             </div>
 
