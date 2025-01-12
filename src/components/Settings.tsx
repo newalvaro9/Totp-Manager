@@ -155,7 +155,7 @@ export default function Settings({ onLogout, secrets, setSecrets, setNotificatio
                         <p>
                             <strong>Storage:</strong>
                             <span
-                                className={styles["path-container"]}
+                                className={styles.pathContainer}
                                 onClick={copy}
                             >
                                 {storagePath}
@@ -165,19 +165,21 @@ export default function Settings({ onLogout, secrets, setSecrets, setNotificatio
                     <hr className={styles.divider} />
                     <div className={styles.actions}>
                         <button className={styles.actionButton} onClick={handleImport}>
-                            Import Keys
+                            Import secrets
                         </button>
                         <button className={styles.actionButton} onClick={handleExport}>
-                            Export Keys
+                            Export secrets
                         </button>
                     </div>
                     <hr className={styles.divider} />
-                    <button
-                        className={styles.logoutButton}
-                        onClick={onLogout}
-                    >
-                        <img src={Out} alt="Logout" /> Logout
-                    </button>
+                    <div className={styles.logoutButtonContainer}>
+                        <button
+                            className={styles.logoutButton}
+                            onClick={onLogout}
+                        >
+                            <img src={Out} alt="Logout" /> Logout
+                        </button>
+                    </div>
                 </div>
             )}
         </div>

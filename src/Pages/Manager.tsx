@@ -115,7 +115,6 @@ export default function Manager({ setShowPassword }: ManagerProps) {
             </div>
 
             <div className={styles["container-secrets"]}>
-                <h2 className={styles["stored-secrets-title"]}>Stored Secrets</h2>
                 {!isInitialized ? (
                     <p style={{ alignSelf: 'center' }}>Loading secrets...</p>
                 ) : secrets.length === 0 ? (

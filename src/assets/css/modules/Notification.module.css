@@ -1,32 +1,65 @@
 .notification {
     position: fixed;
-    bottom: 1rem;
-    right: 1rem;
-    padding: 0.75rem 1rem;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    bottom: clamp(1rem, 3vw, 2rem);
+    right: clamp(1rem, 3vw, 2rem);
+    padding: clamp(0.75rem, 2vw, 1rem) clamp(1rem, 3vw, 1.5rem);
+    border-radius: 12px;
+    background: rgba(26, 27, 38, 0.8);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
     z-index: 1000;
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    font-size: 0.875rem;
-    max-width: 300px;
-    backdrop-filter: blur(8px);
+    gap: 0.75rem;
+    font-size: clamp(0.875rem, 2vw, 1rem);
+    max-width: min(90vw, 400px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #dae0f3;
+    transform-origin: right bottom;
 }
 
 .notification-error {
-    background-color: rgba(220, 38, 38, 0.95);
-    border-left: 4px solid #dc2626;
+    border-left: 4px solid #f7768e;
+}
+
+.notification-error::before {
+    content: '';
+    width: 16px;
+    height: 16px;
+    background: #f7768e;
+    border-radius: 50%;
+    flex-shrink: 0;
 }
 
 .notification-success {
-    background-color: rgba(22, 163, 74, 0.95);
-    border-left: 4px solid #16a34a;
+    border-left: 4px solid #9ece6a;
+}
+
+.notification-success::before {
+    content: '';
+    width: 16px;
+    height: 16px;
+    background: #9ece6a;
+    border-radius: 50%;
+    flex-shrink: 0;
 }
 
 .notification-info {
-    background-color: rgba(59, 130, 246, 0.95);
-    border-left: 4px solid #3b82f6;
+    border-left: 4px solid #7aa2f7;
+}
+
+.notification-info::before {
+    content: '';
+    width: 16px;
+    height: 16px;
+    background: #7aa2f7;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.notification span {
+    flex-grow: 1;
+    line-height: 1.4;
 }
 
 .notification button {
@@ -35,28 +68,50 @@
     color: currentColor;
     opacity: 0.7;
     cursor: pointer;
-    padding: 0;
+    padding: 0.25rem;
     margin-left: auto;
     font-size: 1.25rem;
     line-height: 1;
-    transition: opacity 0.2s;
+    transition: all 0.2s ease;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
 }
 
 .notification button:hover {
     opacity: 1;
+    background: rgba(255, 255, 255, 0.1);
 }
 
 @keyframes slideIn {
     from {
-        transform: translateX(100%);
+        transform: translateX(100%) scale(0.5);
         opacity: 0;
     }
     to {
-        transform: translateX(0);
+        transform: translateX(0) scale(1);
         opacity: 1;
     }
 }
 
+@keyframes slideOut {
+    from {
+        transform: translateX(0) scale(1);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(100%) scale(0.5);
+        opacity: 0;
+    }
+}
+
 .animate-slide-in {
-    animation: slideIn 0.3s ease-out forwards;
+    animation: slideIn 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+}
+
+.animate-slide-out {
+    animation: slideOut 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
 }

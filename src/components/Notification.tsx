@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 /* Styles */
 import styles from "../assets/css/modules/Notification.module.css";
@@ -10,18 +10,36 @@ interface NotificationProps {
 }
 
 export default function Notification({ message, type, onClose }: NotificationProps) {
+    const [isClosing, setIsClosing] = useState(false);
+
     useEffect(() => {
         const timer = setTimeout(() => {
-            onClose();
+            handleClose();
         }, 3000);
 
         return () => clearTimeout(timer);
-    }, [onClose]);
+    }, []);
+
+    const handleClose = () => {
+        setIsClosing(true);
+        setTimeout(() => {
+            onClose();
+        }, 300); // Animation duration
+    };
 
     return (
-        <div className={`${styles["notification"]} ${styles[`notification-${type}`]}  ${styles["animate-slide-in"]}`}>
+        <div
+            className={`${styles.notification} ${styles[`notification-${type}`]} ${isClosing ? styles["animate-slide-out"] : styles["animate-slide-in"]
+                }`}
+            role="alert"
+        >
             <span>{message}</span>
-            <button onClick={onClose}>×</button>
+            <button
+                onClick={handleClose}
+                aria-label="Close notification"
+            >
+                ×
+            </button>
         </div>
     );
 }

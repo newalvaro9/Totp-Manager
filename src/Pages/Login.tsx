@@ -13,6 +13,7 @@ export default function Login({ setShowPassword }: Props) {
     const [error, setError] = useState("");
     const errorTimeoutRef = useRef<number>();
     const [password, setPassword] = useState("");
+    const [loading, setLoading] = useState(false);
 
     const setErrorWithTimeout = (message: string) => {
         if (errorTimeoutRef.current) {
@@ -24,6 +25,7 @@ export default function Login({ setShowPassword }: Props) {
 
     const handleSubmit = async () => {
         setPassword("");
+        setLoading(true);
         try {
             if (showResetPrompt) {
                 await storage.resetStorage(password);
@@ -43,7 +45,15 @@ export default function Login({ setShowPassword }: Props) {
             } else {
                 setErrorWithTimeout("An unknown error occurred");
             }
+        } finally {
+            setLoading(false);
         }
+    };
+
+    const handleReset = () => {
+        setShowResetPrompt(true);
+        setError("");
+        setPassword("");
     };
 
     const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -76,8 +86,12 @@ export default function Login({ setShowPassword }: Props) {
                         {error && <div className={styles["error-message"]}>{error}</div>}
                     </div>
                     <div className={styles["button-container"]}>
-                        <button onClick={handleSubmit} className="btn btn-primary" style={{ marginTop: '1rem', width: '100%' }}>
-                            {showResetPrompt ? "Create New Storage" : "Submit"}
+                        <button
+                            className={styles["submit-button"]}
+                            onClick={handleSubmit}
+                            disabled={loading}
+                        >
+                            {loading ? "Loading..." : (showResetPrompt ? "Create New Storage" : "Submit")}
                         </button>
                         {showResetPrompt ? (
                             <button
@@ -86,18 +100,17 @@ export default function Login({ setShowPassword }: Props) {
                                     setError("");
                                     setPassword("");
                                 }}
-                                className="btn btn-danger"
-                                style={{ width: '100%' }}
+                                className={styles["forgot-password"]}
                             >
                                 Cancel
                             </button>
                         ) : (
-                            <div
-                                onClick={() => setShowResetPrompt(true)}
-                                style={{ width: '100%', color: "red", cursor: "pointer" }}
+                            <button
+                                className={styles["forgot-password"]}
+                                onClick={handleReset}
                             >
-                                <u>I don't remember my password</u>
-                            </div>
+                                I don't remember my password
+                            </button>
                         )}
                     </div>
                 </div>
