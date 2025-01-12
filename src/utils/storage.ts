@@ -3,6 +3,7 @@ import { aes_gcm_decrypt, aes_gcm_encrypt } from './aes';
 import { SecretI } from '../types/types';
 import { invoke } from '@tauri-apps/api/core';
 import { appLocalDataDir } from '@tauri-apps/api/path';
+import { platform } from '@tauri-apps/plugin-os';
 
 const file = "storage.enc";
 
@@ -37,7 +38,11 @@ class StorageService {
                 this.storageDir = await invoke<string>('get_app_path');
             }
 
-            this.storageFile = `${this.storageDir}\\${file}`;
+            if (platform() === 'windows') {
+                this.storageFile = `${this.storageDir}\\${file}`;
+            } else {
+                this.storageFile = `${this.storageDir}/${file}`;
+            }
 
             const fileExists = await exists(this.storageFile);
             if (!fileExists) {
@@ -60,7 +65,11 @@ class StorageService {
                     this.storageDir = await invoke<string>('get_app_path');
                 }
 
-                this.storageFile = `${this.storageDir}\\${file}`;
+                if (platform() === 'windows') {
+                    this.storageFile = `${this.storageDir}\\${file}`;
+                } else {
+                    this.storageFile = `${this.storageDir}/${file}`;
+                }
             }
 
             const fileExists = await exists(this.storageFile);
