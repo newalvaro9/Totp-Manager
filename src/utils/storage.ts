@@ -1,7 +1,10 @@
-import { appDataDir } from '@tauri-apps/api/path';
 import { readTextFile, writeFile, exists, create } from '@tauri-apps/plugin-fs';
 import { aes_gcm_decrypt, aes_gcm_encrypt } from './aes';
 import { SecretI } from '../types/types';
+import { invoke } from '@tauri-apps/api/core';
+import { appLocalDataDir } from '@tauri-apps/api/path';
+
+const file = "storage.enc";
 
 class StorageService {
     private static instance: StorageService;
@@ -20,6 +23,29 @@ class StorageService {
         return StorageService.instance;
     }
 
+    public async getStoragePath(): Promise<string> {
+        await this.ensureStorageExists();
+        return this.storageFile || '';
+    }
+
+    private async ensureStorageExists(): Promise<void> {
+        if (!this.storageDir || !this.storageFile) {
+
+            if (import.meta.env.DEV) {
+                this.storageDir = await appLocalDataDir();
+            } else {
+                this.storageDir = await invoke<string>('get_app_path');
+            }
+
+            this.storageFile = `${this.storageDir}\\${file}`;
+
+            const fileExists = await exists(this.storageFile);
+            if (!fileExists) {
+                await create(this.storageFile);
+            }
+        }
+    }
+
     public setPassword(password: string | null): void {
         this.password = password;
     }
@@ -27,8 +53,14 @@ class StorageService {
     public async validatePassword(password: string): Promise<boolean> {
         try {
             if (!this.storageDir || !this.storageFile) {
-                this.storageDir = await appDataDir();
-                this.storageFile = `${this.storageDir}/storage.txt`;
+
+                if (import.meta.env.DEV) {
+                    this.storageDir = await appLocalDataDir();
+                } else {
+                    this.storageDir = await invoke<string>('get_app_path');
+                }
+
+                this.storageFile = `${this.storageDir}\\${file}`;
             }
 
             const fileExists = await exists(this.storageFile);
@@ -47,14 +79,9 @@ class StorageService {
     }
 
     public async resetStorage(password: string): Promise<void> {
-        if (!this.storageDir || !this.storageFile) {
-            this.storageDir = await appDataDir();
-            this.storageFile = `${this.storageDir}/storage.txt`;
-        }
-
-        const dirExists = await exists(this.storageDir);
-        if (!dirExists) {
-            await create(this.storageDir);
+        await this.ensureStorageExists();
+        if (!this.storageFile) {
+            throw new Error('Storage not initialized');
         }
 
         const encrypted = await aes_gcm_encrypt("[]", password);
@@ -63,31 +90,6 @@ class StorageService {
             new TextEncoder().encode(encrypted)
         );
         this.password = password;
-    }
-
-    private async ensureStorageExists(): Promise<void> {
-        if (!this.password) {
-            throw new Error('Password not set');
-        }
-
-        if (!this.storageDir || !this.storageFile) {
-            this.storageDir = await appDataDir();
-            this.storageFile = `${this.storageDir}/storage.txt`;
-            console.log(this.storageFile);
-            const dirExists = await exists(this.storageDir);
-            if (!dirExists) {
-                await create(this.storageDir);
-            }
-
-            const fileExists = await exists(this.storageFile);
-            if (!fileExists) {
-                const encrypted = await aes_gcm_encrypt("[]", this.password);
-                await writeFile(
-                    this.storageFile,
-                    new TextEncoder().encode(encrypted)
-                );
-            }
-        }
     }
 
     public async get(): Promise<SecretI[]> {

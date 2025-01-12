@@ -9,6 +9,7 @@ import styles from '../assets/css/modules/Manager.module.css';
 /* Components */
 import Secret from './../components/Secret';
 import Notification from './../components/Notification';
+import Settings from './../components/Settings';
 
 import { SecretI, NotificationState } from "./../types/types";
 
@@ -156,19 +157,16 @@ export default function Manager({ setShowPassword }: ManagerProps) {
         }
     };
 
+    const logout = () => {
+        storage.setPassword(null);
+        setShowPassword(true);
+    };
+
     return (
-        <div className={styles["container"]}>
-            <div className={styles["logout-container"]}>
-                <button
-                    onClick={() => {
-                        storage.setPassword(null);
-                        setShowPassword(true);
-                    }}
-                    className="btn btn-danger"
-                >
-                    Logout
-                </button>
-            </div>
+        <div className={styles.container}>
+            <Settings
+                onLogout={logout}
+            />
 
             {notification && (
                 <Notification

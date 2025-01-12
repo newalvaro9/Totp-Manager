@@ -14,7 +14,10 @@
       "identifier": "fs:allow-exists",
       "allow": [
         {
-          "path": "$APPDATA/*"
+          "path": "$LOCALDATA/TOTP Manager/*"
+        },
+        {
+          "path": "$APPLOCALDATA"
         }
       ]
     },
@@ -22,7 +25,10 @@
       "identifier": "fs:allow-app-write",
       "allow": [
         {
-          "path": "$APPDATA/*"
+          "path": "$LOCALDATA/TOTP Manager/*"
+        },
+        {
+          "path": "$APPLOCALDATA"
         }
       ]
     },
@@ -30,7 +36,10 @@
       "identifier": "fs:allow-app-read",
       "allow": [
         {
-          "path": "$APPDATA/*"
+          "path": "$LOCALDATA/TOTP Manager/*"
+        },
+        {
+          "path": "$APPLOCALDATA"
         }
       ]
     }
