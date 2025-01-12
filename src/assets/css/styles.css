@@ -13,7 +13,7 @@ body,
     overflow-y: auto;
 }
 
-body::-webkit-scrollbar {
+::-webkit-scrollbar {
     width: 0;
     height: 0;
 }
