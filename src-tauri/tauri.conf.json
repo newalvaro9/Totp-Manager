@@ -14,9 +14,9 @@
       {
         "title": "TOTP Manager",
         "width": 900,
-        "height": 600,
+        "height": 670,
         "minWidth": 900,
-        "minHeight": 600
+        "minHeight": 670
       }
     ],
     "security": {
