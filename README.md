@@ -5,8 +5,7 @@
 
 A modern, secure, and user-friendly TOTP (Time-based One-Time Password) manager built with Tauri.
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-[![GitHub release](https://img.shields.io/github/v/release/newalvaro9/Totp-Manager-Desktop)](https://github.com/newalvaro9/Totp-Manager-Desktop/releases)
+[![GitHub release](https://img.shields.io/github/v/release/newalvaro9/Totp-Manager-Desktop)](https://github.com/newalvaro9/Totp-Manager/releases)
 
 </div>
 
@@ -22,7 +21,7 @@ A modern, secure, and user-friendly TOTP (Time-based One-Time Password) manager 
 
 ### Download Release
 
-1. Visit the [Releases Page](https://github.com/newalvaro9/Totp-Manager-Desktop/releases)
+1. Visit the [Releases Page](https://github.com/newalvaro9/Totp-Manager/releases)
 2. Download the latest version for your operating system
 3. Install and run the application
 
