@@ -1,8 +1,8 @@
 [package]
 name = "totp-manager"
-version = "1.0.0"
-description = "A Tauri App"
-authors = ["you"]
+version = "1.0.1"
+description = "A modern, secure, and user-friendly TOTP (Time-based One-Time Password) manager."
+authors = ["Álvaro Poblador Esteban"]
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
