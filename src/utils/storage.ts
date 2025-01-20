@@ -98,33 +98,55 @@ class StorageService {
             if (!this.storageFile) {
                 throw new Error('Storage not initialized');
             }
+            if (!this.password) {
+                throw new Error('Password not set');
+            }
 
             const content = await readTextFile(this.storageFile);
-            const decrypted = await aes_gcm_decrypt(content, this.password!);
-            const data = JSON.parse(decrypted);
-            return data || [];
+            const decrypted = await aes_gcm_decrypt(content, this.password);
+            return JSON.parse(decrypted);
         } catch (error) {
-            console.error(`Failed to get storage:`, error);
-            throw error;
+            console.error('Error getting secrets:', error);
+            return [];
         }
     }
 
-    public async set(data: string): Promise<void> {
+    public async save(secrets: SecretI[]): Promise<void> {
         try {
             await this.ensureStorageExists();
             if (!this.storageFile) {
                 throw new Error('Storage not initialized');
             }
+            if (!this.password) {
+                throw new Error('Password not set');
+            }
 
-            const encrypted = await aes_gcm_encrypt(data, this.password!);
+            // Ensure all secrets have a folder property
+            const secretsWithFolders = secrets.map(secret => ({
+                ...secret,
+                folder: secret.folder || ''
+            }));
+
+            const encrypted = await aes_gcm_encrypt(JSON.stringify(secretsWithFolders), this.password);
             await writeFile(
                 this.storageFile,
                 new TextEncoder().encode(encrypted)
             );
         } catch (error) {
-            console.error(`Failed to set data:`, error);
+            console.error('Error saving secrets:', error);
             throw error;
         }
+    }
+
+    public async getByFolder(folder: string): Promise<SecretI[]> {
+        const secrets = await this.get();
+        return secrets.filter(secret => (secret.folder || '') === folder);
+    }
+
+    public async getFolders(): Promise<string[]> {
+        const secrets = await this.get();
+        const folders = new Set(secrets.map(secret => secret.folder || '').filter(folder => folder !== ''));
+        return Array.from(folders);
     }
 }
 
