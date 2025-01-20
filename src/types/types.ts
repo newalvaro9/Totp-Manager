@@ -1,6 +1,7 @@
 export interface SecretI {
     name: string;
     secret: string;
+    folder?: string;
 }
 
 export interface NotificationState {

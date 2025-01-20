@@ -13,13 +13,14 @@ import storage from '../utils/storage';
 import { SecretI } from '../types/types';
 
 interface SettingsProps {
+    onLogout: () => void;
     secrets: SecretI[],
     setSecrets: React.Dispatch<React.SetStateAction<SecretI[]>>,
+    setFolders: React.Dispatch<React.SetStateAction<string[]>>,
     setNotification: React.Dispatch<React.SetStateAction<{ message: string; type: 'error' | 'success' | 'info' } | null>>,
-    onLogout: () => void;
 }
 
-export default function Settings({ onLogout, secrets, setSecrets, setNotification }: SettingsProps) {
+export default function Settings({ onLogout, secrets, setSecrets, setFolders, setNotification }: SettingsProps) {
     const [isOpen, setIsOpen] = useState(false);
     const [version, setVersion] = useState<string | null>(null);
     const settingsRef = useRef<HTMLDivElement>(null);
@@ -65,7 +66,8 @@ export default function Settings({ onLogout, secrets, setSecrets, setNotificatio
             if (!Array.isArray(importedSecrets) || !importedSecrets.every(secret =>
                 typeof secret === 'object' &&
                 typeof secret.name === 'string' &&
-                typeof secret.secret === 'string'
+                typeof secret.secret === 'string' &&
+                (typeof secret.folder === 'string' || secret.folder === undefined)
             )) {
                 setNotification({
                     message: 'Invalid file format',
@@ -75,10 +77,15 @@ export default function Settings({ onLogout, secrets, setSecrets, setNotificatio
             }
 
             const newSecrets = [...secrets];
+            const importedFolders = new Set<string>(); // Track imported folders (set for uniqueness)
             let duplicates = 0;
             let added = 0;
 
             for (const importedSecret of importedSecrets) {
+                if (importedSecret.folder) {
+                    importedFolders.add(importedSecret.folder);
+                }
+
                 if (!newSecrets.some(s => s.name === importedSecret.name)) {
                     newSecrets.push(importedSecret);
                     added++;
@@ -87,13 +94,16 @@ export default function Settings({ onLogout, secrets, setSecrets, setNotificatio
                 }
             }
 
-            await storage.set(JSON.stringify(newSecrets));
+            await storage.save(newSecrets);
             setSecrets(newSecrets);
+
+            setFolders(folders => [...folders, ...Array.from(importedFolders)]);
 
             setNotification({
                 message: `Imported ${added} secrets${duplicates > 0 ? ` (${duplicates} duplicates skipped)` : ''}`,
                 type: 'success'
             });
+
         } catch (error) {
             setNotification({
                 message: 'Failed to import secrets: ' + (error instanceof Error ? error.message : String(error)),
