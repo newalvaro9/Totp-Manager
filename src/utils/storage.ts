@@ -37,7 +37,7 @@ class StorageService {
                 this.storageDir = await invoke<string>('get_app_path');
             }
 
-            this.storageFile = `${this.storageDir}\\${file}`;
+            this.storageFile = `${this.storageDir}/${file}`;
 
             const fileExists = await exists(this.storageFile);
             if (!fileExists) {
@@ -60,7 +60,7 @@ class StorageService {
                     this.storageDir = await invoke<string>('get_app_path');
                 }
 
-                this.storageFile = `${this.storageDir}\\${file}`;
+                this.storageFile = `${this.storageDir}/${file}`;
             }
 
             const fileExists = await exists(this.storageFile);
