@@ -27,7 +27,7 @@ interface MenuPosition {
 }
 
 export default function Secret({ secret, secrets, setSecrets, folders }: SecretProps) {
-    const [otp, setOtp] = useState('Generating...');
+    const [otp, setOtp] = useState('...');
     const [progress, setProgress] = useState(0);
     const [notification, setNotification] = useState<NotificationState | null>(null);
     const [contextMenu, setContextMenu] = useState<MenuPosition | null>(null);
@@ -131,7 +131,7 @@ export default function Secret({ secret, secrets, setSecrets, folders }: SecretP
                 onContextMenu={handleContextMenu}
             >
                 <span className={styles["secret-name"]}>{secret.name}</span>
-                <span className={styles["otp-code"]} onClick={copyKey}>{otp === "Generating..." ? otp : otp.slice(0, 3) + " " + otp.slice(3)}</span>
+                <span className={styles["otp-code"]} onClick={copyKey}>{otp === "..." ? otp : otp.slice(0, 3) + " " + otp.slice(3)}</span>
                 <button className={styles["delete-button"]} onClick={deleteSecret}>
                     Delete
                 </button>

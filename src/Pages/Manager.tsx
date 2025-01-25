@@ -31,6 +31,7 @@ export default function Manager({ setShowPassword }: ManagerProps) {
     const [isInitialized, setIsInitialized] = useState(false);
     const [notification, setNotification] = useState<NotificationState | null>(null);
     const [contextMenu, setContextMenu] = useState<{ position: MenuPosition; folder: string } | null>(null);
+    const [showCreateForm, setShowCreateForm] = useState(false);
 
     useEffect(() => {
         (async () => {
@@ -175,27 +176,99 @@ export default function Manager({ setShowPassword }: ManagerProps) {
                 />
             )}
 
-            <div className={styles["menu"]}>
-                <h1>TOTP Manager</h1>
+            <div className={styles["menu"]} style={{ padding: '1rem' }}>
+                <div style={{
+                    display: 'flex',
+                    justifyContent: 'flex-end',
+                    marginBottom: '1.5rem'
+                }}>
+                    <button
+                        className="btn btn-primary"
+                        onClick={() => setShowCreateForm(!showCreateForm)}
+                        style={{
+                            padding: '0.7rem 1.2rem',
+                            border: 'none',
+                            borderRadius: '25px',
+                            background: showCreateForm
+                                ? 'linear-gradient(45deg, #FF6B6B, #ee5253)'
+                                : 'linear-gradient(45deg, #5352ed, #3742fa)',
+                            color: 'white',
+                            fontWeight: '600',
+                            fontSize: '0.9rem',
+                            cursor: 'pointer',
+                            transition: 'all 0.3s ease',
+                            transform: showCreateForm ? 'scale(0.95)' : 'scale(1)',
+                            boxShadow: showCreateForm
+                                ? '0 4px 15px rgba(238, 82, 83, 0.3)'
+                                : '0 4px 15px rgba(55, 66, 250, 0.3)'
+                        }}
+                        onMouseEnter={(e) => {
+                            e.currentTarget.style.transform = showCreateForm ? 'scale(0.97)' : 'scale(1.02)';
+                        }}
+                        onMouseLeave={(e) => {
+                            e.currentTarget.style.transform = showCreateForm ? 'scale(0.95)' : 'scale(1)';
+                        }}
+                    >
+                        {showCreateForm ? '✕ Hide Form' : '+ Add New TOTP'}
+                    </button>
+                </div>
 
-                <input
-                    type="text"
-                    className={styles["input"]}
-                    placeholder="Enter Name"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                />
+                <div style={{
+                    maxHeight: showCreateForm ? '500px' : '0',
+                    opacity: showCreateForm ? '1' : '0',
+                    overflow: 'hidden',
+                    transition: 'all 0.3s ease-in-out',
+                    marginBottom: showCreateForm ? '1rem' : '0'
+                }}>
+                    <div style={{
+                        background: 'linear-gradient(145deg, #2B2B3E, #1E1E2D)',
+                        padding: '1.5rem',
+                        borderRadius: '15px',
+                        boxShadow: '0 8px 20px rgba(0, 0, 0, 0.15)'
+                    }}>
+                        <input
+                            type="text"
+                            className={styles["input"]}
+                            placeholder="Enter Name"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                        />
 
-                <input
-                    type="text"
-                    className={styles["input"]}
-                    placeholder="Enter OTP Secret"
-                    value={otpSecret}
-                    onChange={(e) => setOtpSecret(e.target.value)}
-                />
+                        <input
+                            type="text"
+                            className={styles["input"]}
+                            placeholder="Enter OTP Secret"
+                            value={otpSecret}
+                            onChange={(e) => setOtpSecret(e.target.value)}
+                        />
 
-                <div className={styles["button-container"]}>
-                    <button className="btn btn-primary" onClick={addSecret}>Add Key</button>
+                        <div className={styles["button-container"]} style={{ textAlign: 'right' }}>
+                            <button
+                                className="btn btn-primary"
+                                onClick={addSecret}
+                                style={{
+                                    padding: '0.7rem 1.5rem',
+                                    border: 'none',
+                                    borderRadius: '25px',
+                                    background: 'linear-gradient(45deg, #5352ed, #3742fa)',
+                                    color: 'white',
+                                    fontWeight: '600',
+                                    fontSize: '0.9rem',
+                                    cursor: 'pointer',
+                                    transition: 'all 0.3s ease',
+                                    boxShadow: '0 4px 15px rgba(55, 66, 250, 0.3)'
+                                }}
+                                onMouseEnter={(e) => {
+                                    e.currentTarget.style.transform = 'scale(1.02)';
+                                }}
+                                onMouseLeave={(e) => {
+                                    e.currentTarget.style.transform = 'scale(1)';
+                                }}
+                            >
+                                Add Key
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -212,7 +285,10 @@ export default function Manager({ setShowPassword }: ManagerProps) {
                         </button>
                     ))}
                 </div>
-                <div className={styles["new-folder-compact"]}>
+                <div className={styles["new-folder-compact"]} style={{
+                    display: 'flex',
+                    gap: '0.5rem'
+                }}>
                     <input
                         type="text"
                         className={styles["folder-input"]}
@@ -221,7 +297,22 @@ export default function Manager({ setShowPassword }: ManagerProps) {
                         onChange={(e) => setNewFolder(e.target.value)}
                         onKeyDown={(e) => e.key === 'Enter' && addFolder()}
                     />
-                    <button onClick={addFolder}>+</button>
+                    <button
+                        onClick={addFolder}
+                        style={{
+                            padding: '0.6rem 1rem',
+                            border: 'none',
+                            borderRadius: '12px',
+                            background: 'linear-gradient(45deg, #5352ed, #3742fa)',
+                            color: 'white',
+                            cursor: 'pointer',
+                            transition: 'all 0.3s ease',
+                            fontSize: '1.1rem',
+                            boxShadow: '0 4px 15px rgba(55, 66, 250, 0.3)'
+                        }}
+                    >
+                        +
+                    </button>
                 </div>
             </div>
 
@@ -235,9 +326,14 @@ export default function Manager({ setShowPassword }: ManagerProps) {
 
             <div className={styles["container-secrets"]}>
                 {!isInitialized ? (
-                    <p style={{ alignSelf: 'center' }}>Loading secrets...</p>
+                    <p className={styles["stored-secrets-title"]}>
+                        Loading secrets...
+                    </p>
                 ) : filteredSecrets.length === 0 ? (
-                    <p style={{ alignSelf: 'center' }}>No stored secrets in this folder</p>
+                    <p
+                        className={styles["stored-secrets-title"]}>
+                        No stored secrets in this folder
+                    </p>
                 ) : (
                     filteredSecrets.map((secret) => (
                         <Secret
