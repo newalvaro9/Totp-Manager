@@ -28,7 +28,7 @@ interface MenuPosition {
 
 export default function Secret({ secret, secrets, setSecrets, folders }: SecretProps) {
     const [otp, setOtp] = useState('...');
-    const [progress, setProgress] = useState(0);
+    const [progress, setProgress] = useState(50);
     const [notification, setNotification] = useState<NotificationState | null>(null);
     const [contextMenu, setContextMenu] = useState<MenuPosition | null>(null);
 
@@ -96,7 +96,7 @@ export default function Secret({ secret, secrets, setSecrets, folders }: SecretP
 
     const moveToFolder = async (targetFolder: string) => {
         const updatedSecrets = secrets.map(s =>
-            s.name === secret.name ? { ...s, folder: targetFolder } : s
+            s.name === secret.name ? { folder: targetFolder, ...s } : s
         );
 
         try {
@@ -132,9 +132,11 @@ export default function Secret({ secret, secrets, setSecrets, folders }: SecretP
             >
                 <span className={styles["secret-name"]}>{secret.name}</span>
                 <span className={styles["otp-code"]} onClick={copyKey}>{otp === "..." ? otp : otp.slice(0, 3) + " " + otp.slice(3)}</span>
-                <button className={styles["delete-button"]} onClick={deleteSecret}>
-                    Delete
-                </button>
+                <div className={styles["button-container"]}>
+                    <button className={styles["delete-button"]} onClick={deleteSecret}>
+                        Delete
+                    </button>
+                </div>
             </div>
 
             {contextMenu && (

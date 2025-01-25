@@ -14,53 +14,6 @@
     right: clamp(0.5rem, 2vw, 1rem);
 }
 
-.menu {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background: rgba(26, 27, 38, 0.6);
-    backdrop-filter: blur(10px);
-    border-radius: clamp(8px, 2vw, 12px);
-    border: 1px solid #414868;
-    padding: clamp(1rem, 3vw, 2rem);
-    gap: clamp(1rem, 2vw, 1.5rem);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-    width: min(100%, 600px);
-    margin: 0 auto;
-}
-
-.menu h1 {
-    color: #7aa2f7;
-    font-size: clamp(1.5rem, 4vw, 2rem);
-    font-weight: 600;
-    margin: 0;
-    text-shadow: 0 0 20px rgba(122, 162, 247, 0.3);
-    text-align: center;
-}
-
-.input {
-    width: 100%;
-    max-width: 400px;
-    padding: 0.8rem 1rem;
-    background: #1a1a27;
-    outline: none;
-    border: 1px solid transparent;
-    border-radius: 12px;
-    font-size: 0.95rem;
-    color: white;
-    transition: all 0.3s ease;
-    margin-bottom: 1rem;
-}
-
-.input:focus {
-    outline: none;
-    border-color: #7aa2f7;
-    box-shadow: 0 0 0 2px rgba(122, 162, 247, 0.2);
-}
-
-.input::placeholder {
-    color: #565f89;
-}
 
 .button-container {
     display: flex;

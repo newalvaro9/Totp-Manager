@@ -11,6 +11,7 @@ import Settings from './../components/Settings';
 import ContextMenu from './../components/ContextMenu';
 
 import { SecretI, NotificationState } from "./../types/types";
+import Add from '../components/Add';
 
 interface ManagerProps {
     setShowPassword: React.Dispatch<React.SetStateAction<boolean>>;
@@ -23,15 +24,12 @@ interface MenuPosition {
 
 export default function Manager({ setShowPassword }: ManagerProps) {
     const [secrets, setSecrets] = useState<SecretI[]>([]);
-    const [name, setName] = useState("");
-    const [otpSecret, setOtpSecret] = useState("");
     const [folders, setFolders] = useState<string[]>(['All secrets']);
     const [selectedFolder, setSelectedFolder] = useState('All secrets');
     const [newFolder, setNewFolder] = useState("");
     const [isInitialized, setIsInitialized] = useState(false);
     const [notification, setNotification] = useState<NotificationState | null>(null);
     const [contextMenu, setContextMenu] = useState<{ position: MenuPosition; folder: string } | null>(null);
-    const [showCreateForm, setShowCreateForm] = useState(false);
 
     useEffect(() => {
         (async () => {
@@ -45,45 +43,7 @@ export default function Manager({ setShowPassword }: ManagerProps) {
         })();
     }, []);
 
-    const addSecret = async () => {
-        if (!name || !otpSecret) {
-            setNotification({
-                message: 'Please fill in all fields',
-                type: 'error'
-            });
-            return;
-        }
 
-        if (secrets.find(key => key.name === name)) {
-            setNotification({
-                message: 'A secret with this name already exists',
-                type: 'error'
-            });
-            return;
-        }
-
-        const newSecrets = [...secrets, {
-            name,
-            secret: otpSecret,
-            folder: selectedFolder === 'All secrets' ? '' : selectedFolder
-        }];
-
-        try {
-            await storage.save(newSecrets);
-            setSecrets(newSecrets);
-            setName('');
-            setOtpSecret('');
-            setNotification({
-                message: 'Secret added successfully',
-                type: 'success'
-            });
-        } catch (error) {
-            setNotification({
-                message: 'Failed to save secret: ' + (error instanceof Error ? error.message : String(error)),
-                type: 'error'
-            });
-        }
-    };
 
     const addFolder = async () => {
         if (!newFolder) {
@@ -159,7 +119,7 @@ export default function Manager({ setShowPassword }: ManagerProps) {
     };
 
     return (
-        <div className={styles.container}>
+        <div className={styles.container} onContextMenu={(e) => handleContextMenu(e, selectedFolder)}>
             <Settings
                 secrets={secrets}
                 setSecrets={setSecrets}
@@ -175,102 +135,6 @@ export default function Manager({ setShowPassword }: ManagerProps) {
                     onClose={() => setNotification(null)}
                 />
             )}
-
-            <div className={styles["menu"]} style={{ padding: '1rem' }}>
-                <div style={{
-                    display: 'flex',
-                    justifyContent: 'flex-end',
-                    marginBottom: '1.5rem'
-                }}>
-                    <button
-                        className="btn btn-primary"
-                        onClick={() => setShowCreateForm(!showCreateForm)}
-                        style={{
-                            padding: '0.7rem 1.2rem',
-                            border: 'none',
-                            borderRadius: '25px',
-                            background: showCreateForm
-                                ? 'linear-gradient(45deg, #FF6B6B, #ee5253)'
-                                : 'linear-gradient(45deg, #5352ed, #3742fa)',
-                            color: 'white',
-                            fontWeight: '600',
-                            fontSize: '0.9rem',
-                            cursor: 'pointer',
-                            transition: 'all 0.3s ease',
-                            transform: showCreateForm ? 'scale(0.95)' : 'scale(1)',
-                            boxShadow: showCreateForm
-                                ? '0 4px 15px rgba(238, 82, 83, 0.3)'
-                                : '0 4px 15px rgba(55, 66, 250, 0.3)'
-                        }}
-                        onMouseEnter={(e) => {
-                            e.currentTarget.style.transform = showCreateForm ? 'scale(0.97)' : 'scale(1.02)';
-                        }}
-                        onMouseLeave={(e) => {
-                            e.currentTarget.style.transform = showCreateForm ? 'scale(0.95)' : 'scale(1)';
-                        }}
-                    >
-                        {showCreateForm ? '✕ Hide Form' : '+ Add New TOTP'}
-                    </button>
-                </div>
-
-                <div style={{
-                    maxHeight: showCreateForm ? '500px' : '0',
-                    opacity: showCreateForm ? '1' : '0',
-                    overflow: 'hidden',
-                    transition: 'all 0.3s ease-in-out',
-                    marginBottom: showCreateForm ? '1rem' : '0'
-                }}>
-                    <div style={{
-                        background: 'linear-gradient(145deg, #2B2B3E, #1E1E2D)',
-                        padding: '1.5rem',
-                        borderRadius: '15px',
-                        boxShadow: '0 8px 20px rgba(0, 0, 0, 0.15)'
-                    }}>
-                        <input
-                            type="text"
-                            className={styles["input"]}
-                            placeholder="Enter Name"
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
-                        />
-
-                        <input
-                            type="text"
-                            className={styles["input"]}
-                            placeholder="Enter OTP Secret"
-                            value={otpSecret}
-                            onChange={(e) => setOtpSecret(e.target.value)}
-                        />
-
-                        <div className={styles["button-container"]} style={{ textAlign: 'right' }}>
-                            <button
-                                className="btn btn-primary"
-                                onClick={addSecret}
-                                style={{
-                                    padding: '0.7rem 1.5rem',
-                                    border: 'none',
-                                    borderRadius: '25px',
-                                    background: 'linear-gradient(45deg, #5352ed, #3742fa)',
-                                    color: 'white',
-                                    fontWeight: '600',
-                                    fontSize: '0.9rem',
-                                    cursor: 'pointer',
-                                    transition: 'all 0.3s ease',
-                                    boxShadow: '0 4px 15px rgba(55, 66, 250, 0.3)'
-                                }}
-                                onMouseEnter={(e) => {
-                                    e.currentTarget.style.transform = 'scale(1.02)';
-                                }}
-                                onMouseLeave={(e) => {
-                                    e.currentTarget.style.transform = 'scale(1)';
-                                }}
-                            >
-                                Add Key
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
             <div className={styles["folders-bar"]}>
                 <div className={styles["folders-list"]}>
@@ -335,15 +199,18 @@ export default function Manager({ setShowPassword }: ManagerProps) {
                         No stored secrets in this folder
                     </p>
                 ) : (
-                    filteredSecrets.map((secret) => (
-                        <Secret
-                            key={secret.name}
-                            secret={secret}
-                            secrets={secrets}
-                            setSecrets={setSecrets}
-                            folders={folders}
-                        />
-                    ))
+                    <>
+                        <Add setNotification={setNotification} secrets={secrets} setSecrets={setSecrets} selectedFolder={selectedFolder} />
+                        {filteredSecrets.map((secret) => (
+                            <Secret
+                                key={secret.name}
+                                secret={secret}
+                                secrets={secrets}
+                                setSecrets={setSecrets}
+                                folders={folders}
+                            />
+                        ))}
+                    </>
                 )}
             </div>
         </div>
